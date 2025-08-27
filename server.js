@@ -5,30 +5,48 @@ const cors = require('cors');
 
 const app = express();
 
-
+// Configuration CORS pour autoriser plusieurs origines (local et prod)
 const corsOptions = {
-  origin: 'http://localhost:5173', 
-  optionsSuccessStatus: 200
+  origin: (origin, callback) => {
+    // Liste des origines autorisées
+    const allowedOrigins = [
+      'http://localhost:5173',  // Développement local (Vite)
+      'https://respirepropre-one.vercel.app'  // Production (Vercel) - remplace par ton domaine exact si différent
+    ];
+    // Autorise les requêtes sans origine (ex. Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  optionsSuccessStatus: 200,  // Pour les anciens navigateurs
+  credentials: true  // Si tu utilises des cookies/auth (optionnel ici)
 };
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail', 
-  auth: {
-    user: process.env.EMAIL_USER, 
-    pass: process.env.EMAIL_PASS, 
-  },
+// Route pour la racine (pour éviter 404 si appelée par erreur)
+app.get('/', (req, res) => {
+  res.json({ message: 'API Respire Propre - Backend opérationnel' });
 });
 
-
+// Ton endpoint existant (inchangé)
 app.post('/api/send-email', async (req, res) => {
   const { firstName, lastName, email, phone, address, message } = req.body;
-  
 
   if (!firstName || !lastName || !email || !message) {
     return res.status(400).json({ message: 'Veuillez remplir tous les champs obligatoires.' });
   }
+
+  const transporter = nodemailer.createTransporter({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
 
   const mailToCompany = {
     from: `"Formulaire Respire Propre" <${process.env.EMAIL_USER}>`,
@@ -73,7 +91,7 @@ app.post('/api/send-email', async (req, res) => {
         <hr>
         <p>À très bientôt,</p>
         <p><strong>L'équipe Respire Propre</strong></p>
-        <p><a href="http://localhost:5173">Visitez notre site</a></p> 
+        <p><a href="https://respirepropre-one.vercel.app">Visitez notre site</a></p>  <!-- Mise à jour pour prod -->
       </div>
     `,
   };
