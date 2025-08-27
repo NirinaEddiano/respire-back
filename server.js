@@ -40,7 +40,7 @@ app.post('/api/send-email', async (req, res) => {
     return res.status(400).json({ message: 'Veuillez remplir tous les champs obligatoires.' });
   }
 
-  const transporter = nodemailer.createTransporter({
+  const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
