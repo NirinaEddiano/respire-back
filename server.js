@@ -32,9 +32,15 @@ app.get('/', (req, res) => {
   res.json({ message: 'API Respire Propre - Backend opérationnel' });
 });
 
+const formatDate = (dateString) => {
+  if (!dateString) return null;
+  const [year, month, day] = dateString.split('-');
+  return `${day}/${month}/${year}`;
+};
+
 // Ton endpoint existant (inchangé)
 app.post('/api/send-email', async (req, res) => {
-  const { firstName, lastName, email, phone, address, message } = req.body;
+  const { firstName, lastName, email, phone, address, message, reservationDate, reservationTime  } = req.body;
 
   if (!firstName || !lastName || !email || !message) {
     return res.status(400).json({ message: 'Veuillez remplir tous les champs obligatoires.' });
@@ -64,6 +70,13 @@ app.post('/api/send-email', async (req, res) => {
         <li><strong>Téléphone :</strong> ${phone || 'Non fourni'}</li>
         <li><strong>Adresse :</strong> ${address || 'Non fournie'}</li>
       </ul>
+       ${reservationDate && reservationTime ? `
+      <hr>
+      <h2>Détails de la réservation souhaitée :</h2>
+      <ul>
+        <li><strong>Date :</strong> ${formatDate(reservationDate)}</li>
+        <li><strong>Heure :</strong> ${reservationTime}</li>
+      </ul>` : ''}
       <hr>
       <h2>Message :</h2>
       <p style="white-space: pre-wrap;">${message}</p>
@@ -87,6 +100,12 @@ app.post('/api/send-email', async (req, res) => {
           <li><strong>Téléphone :</strong> ${phone || 'Non fourni'}</li>
           <li><strong>Adresse :</strong> ${address || 'Non fournie'}</li>
           <li><strong>Message :</strong><br>${message.replace(/\n/g, '<br>')}</li>
+          ${reservationDate && reservationTime ? `
+            <li><strong>Date souhaitée :</strong> ${formatDate(reservationDate)}</li>
+            <li><strong>Heure souhaitée :</strong> ${reservationTime}</li>
+            ` : ''}
+  
+            <li><strong>Message :</strong><br>${message.replace(/\n/g, '<br>')}</li>
         </ul>
         <hr>
         <p>À très bientôt,</p>
