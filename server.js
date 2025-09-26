@@ -49,9 +49,9 @@ app.post('/api/send-email', async (req, res) => {
 
   // Transporteur Nodemailer avec Gmail (mot de passe d’application requis)
   const transporter = nodemailer.createTransport({
-  host: 'smtp-relay.brevo.com',
-  port: 587,
-  secure: false, // important: false pour le port 587
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // important: false pour le port 587
   auth: {
     user: process.env.EMAIL_USER,    // L'email que vous avez validé sur Brevo
     pass: process.env.BREVO_API_KEY, // Votre clé API que nous venons d'ajouter sur Render
