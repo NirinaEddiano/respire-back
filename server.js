@@ -54,7 +54,7 @@ app.post('/api/send-email', async (req, res) => {
   secure: true, // important: false pour le port 587
   auth: {
     user: process.env.EMAIL_USER,    // L'email que vous avez validé sur Brevo
-    pass: process.env.BREVO_API_KEY, // Votre clé API que nous venons d'ajouter sur Render
+    pass: process.env.EMAIL_PASS, // Votre clé API que nous venons d'ajouter sur Render
   },
 });
 
