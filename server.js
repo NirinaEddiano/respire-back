@@ -123,7 +123,4 @@ app.post('/api/send-email', async (req, res) => {
 });
 
 // Démarrage (Render impose process.env.PORT)
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-  console.log(`🚀 Serveur backend lancé sur le port ${PORT}`);
-});
+module.exports = app;
