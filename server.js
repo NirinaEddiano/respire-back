@@ -110,16 +110,22 @@ app.post('/api/send-email', async (req, res) => {
     `,
   };
 
-  try {
-    await Promise.all([
-      transporter.sendMail(mailToCompany),
-      transporter.sendMail(mailToUser),
-    ]);
-    res.status(200).json({ message: '✅ Message envoyé avec succès !' });
-  } catch (error) {
-    console.error('Erreur lors de l’envoi :', error);
-    res.status(500).json({ message: '❌ Erreur lors de l’envoi de l’email. Réessayez plus tard.' });
-  }
+  // NOUVELLE VERSION - PLUS ROBUSTE POUR VERSEL
+try {
+  // On attend que le premier email soit bien parti
+  await transporter.sendMail(mailToCompany);
+
+  // Puis on attend que le second soit parti
+  await transporter.sendMail(mailToUser);
+
+  // Si les deux lignes ci-dessus réussissent, on envoie la réponse de succès
+  res.status(200).json({ message: '✅ Message envoyé avec succès ! Vous allez recevoir une confirmation.' });
+
+} catch (error) {
+  // Si l'un des deux envois échoue, on log l'erreur et on envoie une réponse d'erreur
+  console.error('Erreur détaillée lors de l’envoi de l’email:', error);
+  res.status(500).json({ message: 'Une erreur interne est survenue lors de l\'envoi de l\'email.' });
+}
 });
 
 // Démarrage (Render impose process.env.PORT)
