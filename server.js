@@ -46,13 +46,16 @@ app.post('/api/send-email', async (req, res) => {
     return res.status(400).json({ message: 'Veuillez remplir tous les champs obligatoires.' });
   }
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  // NOUVELLE CONFIGURATION (PLUS EXPLICITE)
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // true pour le port 465, false pour les autres ports
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
   const mailToCompany = {
     from: `"Formulaire Respire Propre" <${process.env.EMAIL_USER}>`,
