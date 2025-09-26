@@ -84,7 +84,7 @@ app.post('/api/send-email', async (req, res) => {
 
   // Email de confirmation vers l’utilisateur
   const mailToUser = {
-    from: `"Respire Propre" <${process.env.EMAIL_USER}>`,
+    from: `"Saison +" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'Confirmation de votre demande',
     html: `
@@ -104,7 +104,7 @@ app.post('/api/send-email', async (req, res) => {
       <p><strong>Votre message :</strong><br>${message.replace(/\n/g, '<br>')}</p>
       <hr>
       <p>Merci de votre confiance,<br>L’équipe Respire Propre</p>
-      <p><a href="https://respirepropre-one.vercel.app">Visitez notre site</a></p>
+      <p><a href="https://saison-plus.vercel.app">Visitez notre site</a></p>
     `,
   };
 
