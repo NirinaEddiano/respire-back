@@ -11,7 +11,7 @@ const corsOptions = {
     // Liste des origines autorisées
     const allowedOrigins = [
       'http://localhost:5173',  // Développement local (Vite)
-      'https://respirepropre-one.vercel.app'  // Production (Vercel) - remplace par ton domaine exact si différent
+      'https://saison-plus.vercel.app/'  // Production (Vercel) - remplace par ton domaine exact si différent
     ];
     // Autorise les requêtes sans origine (ex. Postman)
     if (!origin) return callback(null, true);
